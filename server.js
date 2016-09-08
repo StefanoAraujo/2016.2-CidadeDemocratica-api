@@ -23,7 +23,7 @@ if(!err) {
 });
 
 app.get("",function(req,res){
-  res.json({"/data/:table_to_query" : "URL To get the data from a table","/doc/:table_to_query": "to get the fields information from a table"})
+  res.json({"/data/:table_to_query" : "URL To get the data from a table","/tables": "to get the tables names","/doc/:table_to_query": "to get the fields information from a table"})
 });
 
 app.get("/data/:table_to_query",function(req,res){
@@ -40,6 +40,16 @@ app.get("/doc/:table_to_query",function(req,res){
 connection.query('SELECT * from '+req.params.table_to_query, function(err, rows, fields) {
   if (!err){
     res.json(fields);
+  }else{
+    res.send(err);
+  }
+  });
+});
+
+app.get("/tables",function(req,res){
+connection.query('SHOW TABLES', function(err, rows, fields) {
+  if (!err){
+    res.json(rows);
   }else{
     res.send(err);
   }
