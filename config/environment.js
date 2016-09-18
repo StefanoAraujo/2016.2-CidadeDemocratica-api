@@ -20,7 +20,7 @@ module.exports = {
       user     : process.env.DB_USER,
       password : process.env.DB_PASS,
       databaseName : process.env.DB_NAME
-    }
+    },
     current: {
       host     : process.env.DB_HOST,
       user     : process.env.DB_USER,
