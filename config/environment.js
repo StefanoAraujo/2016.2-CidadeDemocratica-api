@@ -16,10 +16,16 @@ module.exports = {
 
     },
     production: {
-      host     : 'testcidadedemocratica.ca0jctiv4wib.sa-east-1.rds.amazonaws.com',
-      user     : 'testuser',
-      password : 'testuser',
-      databaseName : 'dumpCidadeDemocratica'
+      host     : process.env.DB_HOST,
+      user     : process.env.DB_USER,
+      password : process.env.DB_PASS,
+      databaseName : process.env.DB_NAME
+    }
+    current: {
+      host     : process.env.DB_HOST,
+      user     : process.env.DB_USER,
+      password : process.env.DB_PASS,
+      databaseName : process.env.DB_NAME
     }
   },
   server: {

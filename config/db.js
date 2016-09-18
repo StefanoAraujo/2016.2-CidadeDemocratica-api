@@ -3,10 +3,10 @@ var mysql      = require('mysql');
 var environment      = require('./environment');
 
 var connection = mysql.createConnection({
-  host     : environment.database.local.host,
-  user     : environment.database.local.user,
-  password : environment.database.local.password,
-  database : environment.database.local.databaseName
+  host     : environment.database.current.host,
+  user     : environment.database.current.user,
+  password : environment.database.current.password,
+  database : environment.database.current.databaseName
 });
 
 function setupDatabase(){
