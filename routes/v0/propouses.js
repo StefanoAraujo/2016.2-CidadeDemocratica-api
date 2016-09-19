@@ -8,18 +8,44 @@ var db = require('../../config/db.js');
  * definition:
  *   Propouse:
  *     properties:
+ *       id:
+ *         type: integer
  *       type:
  *         type: string
- *       id:
- *         type: string
- *       age:
+ *       user_id:
  *         type: integer
- *       sex:
+ *       titulo:
  *         type: string
+ *       descricao:
+ *         type: string
+ *       complementar:
+ *         type: string
+ *       parent_id:
+ *         type: integer
+ *       slug:
+ *         type: string
+ *       created_at:
+ *         type: string
+ *       updated_at:
+ *         type: string
+ *       comments_count:
+ *         type: integer
+ *       adesoes_count:
+ *         type: integer
+ *       relevancia:
+ *         type: integer
+ *       seguidores_count:
+ *         type: integer
+ *       site:
+ *         type: string
+ *       competition_id:
+ *         type: integer
  */
+
+
 /**
  * @swagger
- * /api/v0/propouses:
+ * /propouses:
  *   get:
  *     tags:
  *       - Propouses
@@ -46,6 +72,27 @@ router.route('/propouses')
 })
 
 
+/**
+ * @swagger
+ * /propouses/{propouse_id}:
+ *   get:
+ *     tags:
+ *       - Propouses
+ *     description: Returns a propouse detail
+ *     produces:
+ *       - application/json
+ *     parameters:
+*       - name: propouse_id
+*         description: Propouse's id
+*         in: path
+*         required: true
+*         type: integer
+ *     responses:
+ *       200:
+ *         description: A propouse detail
+ *         schema:
+ *           $ref: '#/definitions/Propouse'
+ */
 router.route('/propouses/:propouse_id')
 .get(function(req,res) {
   if (isNaN(req.params.propouse_id)) {
