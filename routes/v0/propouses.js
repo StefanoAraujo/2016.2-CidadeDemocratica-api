@@ -2,6 +2,36 @@ var express = require('express');
 var router = express.Router();
 var db = require('../../config/db.js');
 
+
+/**
+ * @swagger
+ * definition:
+ *   Propouse:
+ *     properties:
+ *       type:
+ *         type: string
+ *       id:
+ *         type: string
+ *       age:
+ *         type: integer
+ *       sex:
+ *         type: string
+ */
+/**
+ * @swagger
+ * /api/v0/propouses:
+ *   get:
+ *     tags:
+ *       - Propouses
+ *     description: Returns all propouses
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: An array of propouses
+ *         schema:
+ *           $ref: '#/definitions/Propouse'
+ */
 router.route('/propouses')
 .get(function(req,res) {
 

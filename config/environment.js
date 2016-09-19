@@ -6,14 +6,12 @@ module.exports = {
       user     : 'root',
       password : 'root',
       databaseName : 'cidade_democratica_integra'
-
     },
     dev: {
       host     : 'testcidadedemocratica.ca0jctiv4wib.sa-east-1.rds.amazonaws.com',
       user     : 'testuser',
       password : 'testuser',
       databaseName : 'dumpCidadeDemocratica'
-
     },
     production: {
       host     : process.env.DB_HOST,
@@ -22,22 +20,27 @@ module.exports = {
       databaseName : process.env.DB_NAME
     },
     current: {
-      host     : process.env.DB_HOST,
-      user     : process.env.DB_USER,
-      password : process.env.DB_PASS,
-      databaseName : process.env.DB_NAME
+      host     : 'localhost',
+      user     : 'root',
+      password : 'root',
+      databaseName : 'cidade_democratica_integra'
     }
   },
   server: {
     dev: {
       protocol: "http://",
       host: "localhost",
-      port: 8080
+      port: 3000
     },
     production: {
       protocol: "http://",
-      host: "cidadedemocratica.herokuapp.com",
-      port: 8080
+      host: "cidadedemocraticaapi.herokuapp.com",
+      port: 3000
+    },
+    current: {
+      protocol: "http://",
+      host: "localhost",
+      port: 3000
     }
   }
 
