@@ -14,14 +14,14 @@ after_success:
 
 deploy:
 
-- provider: heroku stagging
+- provider: heroku
   api_key:
     secure: $HEROKU_API_KEY
   app: cidadedemocraticaapi-stagging
   on:
     branch: master
 
-- provider: heroku production
+- provider: heroku
   api_key:
     secure: $HEROKU_API_KEY
   app: cidadedemocraticaapi
