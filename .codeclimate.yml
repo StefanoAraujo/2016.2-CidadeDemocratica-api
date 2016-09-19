@@ -1,3 +1,7 @@
-## other configuration excluded from example...
+engines:
+    config:
+      languages:
+      - javascript
+
 exclude_paths:
-- "public/"
+- public/**
