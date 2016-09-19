@@ -32,6 +32,11 @@ module.exports = {
       host: "localhost",
       port: 3000
     },
+    stagging: {
+      protocol: "http://",
+      host: "cidadedemocraticaapi-stagging.herokuapp.com",
+      port: 3000
+    },
     production: {
       protocol: "http://",
       host: "cidadedemocraticaapi.herokuapp.com",
