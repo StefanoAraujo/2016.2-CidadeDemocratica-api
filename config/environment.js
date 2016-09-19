@@ -40,12 +40,12 @@ module.exports = {
     production: {
       protocol: "http://",
       host: "cidadedemocraticaapi.herokuapp.com",
-      port: 3000
+      port: ''
     },
     current: {
       protocol: "http://",
       host: "cidadedemocraticaapi.herokuapp.com",
-      port: 3000
+      port: ''
     }
   }
 
