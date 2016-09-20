@@ -14,7 +14,6 @@ function setupDatabase(){
   connection.connect(function(err){
     if(!err) {
       console.log("Database is connected ... nn");
-      // processSQLFile("DUMP.sql")
     } else {
       console.log("Error connecting database ... nn" + err);
     }

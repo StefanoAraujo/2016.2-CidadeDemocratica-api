@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var db = require('../../config/db.js');
 
+var query = 'SELECT topicos.id, topicos.user_id, topicos.titulo, topicos.descricao, topicos.slug, topicos.comments_count, topicos.adesoes_count, topicos.relevancia, topicos.seguidores_count, topicos.competition_id, topicos.site, cidades.nome AS `city_name`, estados.nome AS `state_name`, estados.abrev AS `state_abrev`FROM topicos INNER JOIN locais ON topicos.type = "Proposta" AND locais.responsavel_type = "User" AND locais.responsavel_id = topicos.id INNER JOIN cidades ON cidades.id = locais.cidade_id INNER JOIN estados ON estados.id = locais.estado_id'
 
 /**
  * @swagger
@@ -60,8 +61,7 @@ var db = require('../../config/db.js');
  */
 router.route('/propouses')
 .get(function(req,res) {
-
-  db.mysqlConnection.query('SELECT * FROM topicos WHERE type = "Proposta"', function(err, rows, fields) {
+    db.mysqlConnection.query(query, function(err, rows, fields) {
     if (!err){
       res.json(rows);
     }else{
@@ -95,10 +95,13 @@ router.route('/propouses')
  */
 router.route('/propouses/:propouse_id')
 .get(function(req,res) {
+
   if (isNaN(req.params.propouse_id)) {
     return res.json("The param is not a number");
   }
-  var sqlQueryString = "SELECT * FROM topicos WHERE id="+req.params.propouse_id+ ' AND type = "Proposta"'
+  var sqlQueryString = query + ' WHERE topicos.id = ' + req.params.propouse_id
+  console.log(sqlQueryString)
+
   db.mysqlConnection.query(sqlQueryString, function(err, rows, fields) {
     if (!err){
       res.json(rows);

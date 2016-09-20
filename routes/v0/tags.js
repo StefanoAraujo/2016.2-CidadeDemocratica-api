@@ -34,7 +34,6 @@ var db = require('../../config/db.js');
  */
 router.route('/tags')
 .get(function(req,res) {
-
   db.mysqlConnection.query('SELECT * FROM tags', function(err, rows, fields) {
     if (!err){
       res.json(rows);
@@ -81,5 +80,7 @@ router.route('/tags/:tag_id')
     });
 
 })
+
+
 
 module.exports = router;
