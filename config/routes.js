@@ -2,7 +2,7 @@ exports.setupRoutesAndVersions = function(app) {
 
   var ROUTES = {
   'Tags':'/tags',
-  'Propouses': '/propouses',
+  'Proposals': '/proposals',
   'Taggings': '/taggings',
   'Users': '/users'
   }

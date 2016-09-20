@@ -7,7 +7,7 @@ var query = 'SELECT topicos.id, topicos.user_id, topicos.titulo, topicos.descric
 /**
  * @swagger
  * definition:
- *   Propouse:
+ *   Proposal:
  *     properties:
  *       id:
  *         type: integer
@@ -46,20 +46,20 @@ var query = 'SELECT topicos.id, topicos.user_id, topicos.titulo, topicos.descric
 
 /**
  * @swagger
- * /propouses:
+ * /proposals:
  *   get:
  *     tags:
- *       - Propouses
- *     description: Returns all propouses
+ *       - Proposals
+ *     description: Returns all proposals
  *     produces:
  *       - application/json
  *     responses:
  *       200:
- *         description: An array of propouses
+ *         description: An array of proposals
  *         schema:
- *           $ref: '#/definitions/Propouse'
+ *           $ref: '#/definitions/Proposal'
  */
-router.route('/propouses')
+router.route('/proposals')
 .get(function(req,res) {
     db.mysqlConnection.query(query, function(err, rows, fields) {
     if (!err){
@@ -74,32 +74,32 @@ router.route('/propouses')
 
 /**
  * @swagger
- * /propouses/{propouse_id}:
+ * /proposals/{proposal_id}:
  *   get:
  *     tags:
- *       - Propouses
- *     description: Returns a propouse detail
+ *       - Proposals
+ *     description: Returns a proposal detail
  *     produces:
  *       - application/json
  *     parameters:
-*       - name: propouse_id
-*         description: Propouse's id
+*       - name: proposal_id
+*         description: Proposal's id
 *         in: path
 *         required: true
 *         type: integer
  *     responses:
  *       200:
- *         description: A propouse detail
+ *         description: A proposal detail
  *         schema:
- *           $ref: '#/definitions/Propouse'
+ *           $ref: '#/definitions/Proposal'
  */
-router.route('/propouses/:propouse_id')
+router.route('/proposals/:proposal_id')
 .get(function(req,res) {
 
-  if (isNaN(req.params.propouse_id)) {
+  if (isNaN(req.params.proposal_id)) {
     return res.json("The param is not a number");
   }
-  var sqlQueryString = query + ' WHERE topicos.id = ' + req.params.propouse_id
+  var sqlQueryString = query + ' WHERE topicos.id = ' + req.params.proposal_id
   console.log(sqlQueryString)
 
   db.mysqlConnection.query(sqlQueryString, function(err, rows, fields) {

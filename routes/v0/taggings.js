@@ -31,7 +31,7 @@ var db = require('../../config/db.js');
  *     produces:
  *       - application/json
  *     parameters:
-*       - name: propouse_id
+*       - name: proposal_id
 *         description: Id of a proposal tagged
 *         in: query
 *         required: false
@@ -52,11 +52,11 @@ router.route('/taggings')
 
   var query =  'SELECT * FROM taggings'
 
-  if (req.query.propouse_id != null) {
-    if (isNaN(req.query.propouse_id)) {
-      return res.json("The propouse_id param is not a number");
+  if (req.query.proposal_id != null) {
+    if (isNaN(req.query.proposal_id)) {
+      return res.json("The proposal_id param is not a number");
     } else {
-      query = query + ' WHERE taggable_id = ' + req.query.propouse_id
+      query = query + ' WHERE taggable_id = ' + req.query.proposal_id
     }
   }
 
