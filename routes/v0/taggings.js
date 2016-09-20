@@ -30,6 +30,17 @@ var db = require('../../config/db.js');
  *     description: Returns all taggings
  *     produces:
  *       - application/json
+ *     parameters:
+*       - name: propouse_id
+*         description: Id of a proposal tagged
+*         in: query
+*         required: false
+*         type: integer
+*       - name: user_id
+*         description: Id of a user tagger
+*         in: query
+*         required: false
+*         type: integer
  *     responses:
  *       200:
  *         description: An array of taggings
@@ -39,7 +50,26 @@ var db = require('../../config/db.js');
 router.route('/taggings')
 .get(function(req,res) {
 
-  db.mysqlConnection.query('SELECT * FROM taggings', function(err, rows, fields) {
+  var query =  'SELECT * FROM taggings'
+
+  if (req.query.propouse_id != null) {
+    if (isNaN(req.query.propouse_id)) {
+      return res.json("The propouse_id param is not a number");
+    } else {
+      query = query + ' WHERE taggable_id = ' + req.query.propouse_id
+    }
+  }
+
+  if (req.query.user_id != null) {
+
+    if (isNaN(req.query.user_id)) {
+      return res.json("The user_id param is not a number");
+    } else {
+      query = query + ' WHERE tagger_id = ' + req.query.user_id
+    }
+  }
+
+  db.mysqlConnection.query(query, function(err, rows, fields) {
     if (!err){
       res.json(rows);
     }else{
@@ -51,7 +81,7 @@ router.route('/taggings')
 
 /**
  * @swagger
- * /taggings/{tagging_id}:
+ * /taggings/{tag_id}:
  *   get:
  *     tags:
  *       - Taggings
@@ -59,7 +89,7 @@ router.route('/taggings')
  *     produces:
  *       - application/json
  *     parameters:
-*       - name: tagging_id
+*       - name: tag_id
 *         description: Tagging's id
 *         in: path
 *         required: true
@@ -70,12 +100,13 @@ router.route('/taggings')
  *         schema:
  *           $ref: '#/definitions/Tagging'
  */
-router.route('/taggings/:tagging_id')
+router.route('/taggings/:tag_id')
 .get(function(req,res) {
   if (isNaN(req.params.tag_id)) {
     return res.json("The param is not a number");
   }
-  db.mysqlConnection.query("SELECT * FROM taggings where id="+req.params.tagging_id, function(err, rows, fields) {
+
+  db.mysqlConnection.query("SELECT * FROM taggings where tag_id="+req.params.tag_id, function(err, rows, fields) {
     if (!err){
       res.json(rows);
     }else{
