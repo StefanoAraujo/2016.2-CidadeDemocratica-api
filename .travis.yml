@@ -1,0 +1,30 @@
+sudo: required
+language: node_js
+node_js:
+  - "5.10.0"
+
+install:
+  - npm install
+
+script:
+  - npm test
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+deploy:
+
+# - provider: heroku
+#   api_key:
+#     secure: $HEROKU_API_KEY
+#   app: cidadedemocraticaapi-stagging
+#   on:
+#     branch: master
+
+- provider: heroku
+  api_key:
+    secure: $HEROKU_API_KEY
+  app: cidadedemocraticaapi
+  on:
+    # tags: true
+    branch: master
