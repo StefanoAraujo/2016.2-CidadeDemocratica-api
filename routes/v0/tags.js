@@ -32,16 +32,30 @@ var db = require('../../config/db.js');
  *         schema:
  *           $ref: '#/definitions/Tag'
  */
-router.route('/tags')
+router.route('/tags/:page')
 .get(function(req,res) {
-  db.mysqlConnection.query('SELECT * FROM tags', function(err, rows, fields) {
+
+  var page = req.params.page
+  var start = 0
+  var limit = 30
+  
+  if(isNaN(page) || page == 0){
+    return res.json({"Error":"The param is not a number or a valid number"});
+  }
+  if(page == 1)
+    start = 0
+  else
+    start = page * limit
+  
+  var query = 'SELECT * FROM tags ORDER BY relevancia DESC'+ ' LIMIT ' + start + ',' + limit 
+
+  db.mysqlConnection.query(query, function(err, rows, fields) {
     if (!err){
       res.json(rows);
     }else{
       res.send(err);
     }
     });
-
 })
 
 
@@ -66,7 +80,7 @@ router.route('/tags')
  *         schema:
  *           $ref: '#/definitions/Tag'
  */
-router.route('/tags/:tag_id')
+router.route('/tag/:tag_id')
 .get(function(req,res) {
   if (isNaN(req.params.tag_id)) {
     return res.json("The param is not a number");
