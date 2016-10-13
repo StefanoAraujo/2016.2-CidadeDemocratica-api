@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var db = require('../../config/db.js');
 
-var query = 'SELECT topicos.id, topicos.user_id, topicos.titulo, topicos.descricao, topicos.slug, topicos.comments_count, topicos.adesoes_count, topicos.relevancia, topicos.seguidores_count, topicos.competition_id, topicos.site, cidades.nome AS `city_name`, estados.nome AS `state_name`, estados.abrev AS `state_abrev`FROM topicos INNER JOIN locais ON topicos.type = "Proposta" AND locais.responsavel_type = "User" AND locais.responsavel_id = topicos.id INNER JOIN cidades ON cidades.id = locais.cidade_id INNER JOIN estados ON estados.id = locais.estado_id'
+var query = 'SELECT topicos.id, topicos.user_id, topicos.titulo, topicos.descricao, topicos.slug, topicos.comments_count, topicos.adesoes_count, topicos.relevancia, topicos.seguidores_count, topicos.competition_id, topicos.site, cidades.nome AS `city_name`, estados.nome AS `state_name`, estados.abrev AS `state_abrev`FROM topicos INNER JOIN locais ON topicos.type = "Proposta" AND locais.responsavel_type = "User" AND locais.responsavel_id = topicos.id INNER JOIN cidades ON cidades.id = locais.cidade_id INNER JOIN estados ON estados.id = locais.estado_id ORDER BY topicos.relevancia DESC'
 
 /**
  * @swagger
@@ -43,7 +43,6 @@ var query = 'SELECT topicos.id, topicos.user_id, topicos.titulo, topicos.descric
  *         type: integer
  */
 
-
 /**
  * @swagger
  * /proposals:
@@ -59,18 +58,30 @@ var query = 'SELECT topicos.id, topicos.user_id, topicos.titulo, topicos.descric
  *         schema:
  *           $ref: '#/definitions/Proposal'
  */
-router.route('/proposals')
+router.route('/proposals/:page')
 .get(function(req,res) {
-    db.mysqlConnection.query(query, function(err, rows, fields) {
-    if (!err){
-      res.json(rows);
-    }else{
-      res.send(err);
+    var page = req.params.page
+    var start = 0
+    var limit = 30
+    
+    if(isNaN(page) || page == 0){
+      return res.json({"Error":"The param is not a number or a valid number"});
     }
+    if(page == 1)
+      start = 0
+    else
+      start = page * limit
+    
+    var limitToQuery = ' LIMIT ' + start + ',' + limit 
+    var newQuery = query + limitToQuery
+    db.mysqlConnection.query(newQuery, function(err, rows, fields) {
+      if (!err){
+        res.json(rows);
+      }else{
+        res.send(err);
+      }
     });
-
 })
-
 
 /**
  * @swagger
@@ -93,7 +104,7 @@ router.route('/proposals')
  *         schema:
  *           $ref: '#/definitions/Proposal'
  */
-router.route('/proposals/:proposal_id')
+router.route('/proposal/:proposal_id')
 .get(function(req,res) {
 
   if (isNaN(req.params.proposal_id)) {
