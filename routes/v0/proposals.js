@@ -56,7 +56,7 @@ var query = 'SELECT topicos.id, topicos.user_id, topicos.titulo, topicos.descric
  *       - name: page
  *         description: Page of proposals , 30 by page
  *         in: query
- *         required: true
+ *         required: false
  *         type: integer
  *     responses:
  *       200:
@@ -71,15 +71,18 @@ router.route('/proposals')
     var limit = 30
 
     if(isNaN(page) || page == 0){
-      return res.json({"Error":"The param is not a number or a valid number"});
-    }
-    if(page == 1)
-      start = 0
-    else
-      start = page * limit
+      var newQuery = query + ' ORDER BY topicos.relevancia DESC'
 
-    var limitToQuery = ' LIMIT ' + start + ',' + limit
-    var newQuery = query + ' ORDER BY topicos.relevancia DESC' + limitToQuery
+    } else {
+      if(page == 1)
+        start = 0
+      else
+        start = page * limit
+
+      var limitToQuery = ' LIMIT ' + start + ',' + limit
+      var newQuery = query + ' ORDER BY topicos.relevancia DESC' + limitToQuery
+    }
+
     db.mysqlConnection.query(newQuery, function(err, rows, fields) {
       if (!err){
         res.json(rows);

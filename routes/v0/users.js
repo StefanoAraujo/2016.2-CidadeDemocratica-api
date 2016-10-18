@@ -65,15 +65,18 @@ router.route('/users')
   var limit = 30
 
   if(isNaN(page) || page == 0){
-    return res.json({"Error":"The param is not a number or a valid number"});
-  }
-  if(page == 1)
-    start = 0
-  else
-    start = page * limit
+    var newQuery = query + ' ORDER BY users.relevancia DESC'
 
-  var limitToQuery = ' LIMIT ' + start + ',' + limit
-  var newQuery = query + ' ORDER BY users.relevancia DESC' + limitToQuery
+  } else {
+    if(page == 1)
+      start = 0
+    else
+      start = page * limit
+
+    var limitToQuery = ' LIMIT ' + start + ',' + limit
+    var newQuery = query + ' ORDER BY users.relevancia DESC' + limitToQuery
+  }
+
   db.mysqlConnection.query(newQuery, function(err, rows, fields) {
     if (!err){
       res.json(rows);
@@ -98,7 +101,7 @@ router.route('/users')
 *       - name: user_id
 *         description: User's id
 *         in: path
-*         required: true
+*         required: false
 *         type: integer
  *     responses:
  *       200:

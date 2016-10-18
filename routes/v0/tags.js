@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var db = require('../../config/db.js');
 
+var query = 'SELECT * FROM tags '
 
 /**
  * @swagger
@@ -30,7 +31,7 @@ var db = require('../../config/db.js');
  *       - name: page
  *         description: Page of proposals , 30 by page
  *         in: query
- *         required: true
+ *         required: false
  *         type: integer
  *     responses:
  *       200:
@@ -40,20 +41,22 @@ var db = require('../../config/db.js');
  */
 router.route('/tags')
 .get(function(req,res) {
-
   var page = req.query.page
   var start = 0
   var limit = 30
-
+  
   if(isNaN(page) || page == 0){
-    return res.json({"Error":"The param is not a number or a valid number"});
-  }
-  if(page == 1)
-    start = 0
-  else
-    start = page * limit
+    var newQuery = query + ' ORDER BY users.relevancia DESC'
 
-  var query = 'SELECT * FROM tags ORDER BY relevancia DESC'+ ' LIMIT ' + start + ',' + limit
+  } else {
+    if(page == 1)
+      start = 0
+    else
+      start = page * limit
+
+    var limitToQuery = ' LIMIT ' + start + ',' + limit
+    var newQuery = query + ' ORDER BY users.relevancia DESC' + limitToQuery
+  }
 
   db.mysqlConnection.query(query, function(err, rows, fields) {
     if (!err){

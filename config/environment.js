@@ -20,10 +20,10 @@ module.exports = {
       databaseName : process.env.DB_NAME
     },
     current: {
-      host     : process.env.DB_HOST,
-      user     : process.env.DB_USER,
-      password : process.env.DB_PASS,
-      databaseName : process.env.DB_NAME
+      host     : 'localhost',
+      user     : 'root',
+      password : 'root',
+      databaseName : 'cidade_democratica_integra'
     }
   },
   server: {
@@ -44,8 +44,8 @@ module.exports = {
     },
     current: {
       protocol: "http://",
-      host: "cidadedemocraticaapi.herokuapp.com",
-      port: ''
+      host: "localhost:3000",
+      port: 3000
     }
   }
 
