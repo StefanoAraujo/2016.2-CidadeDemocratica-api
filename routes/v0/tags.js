@@ -26,19 +26,25 @@ var db = require('../../config/db.js');
  *     description: Returns all tags
  *     produces:
  *       - application/json
+ *     parameters:
+ *       - name: page
+ *         description: Page of proposals , 30 by page
+ *         in: query
+ *         required: true
+ *         type: integer
  *     responses:
  *       200:
  *         description: An array of tags
  *         schema:
  *           $ref: '#/definitions/Tag'
  */
-router.route('/tags/:page')
+router.route('/tags')
 .get(function(req,res) {
 
-  var page = req.params.page
+  var page = req.query.page
   var start = 0
   var limit = 30
-  
+
   if(isNaN(page) || page == 0){
     return res.json({"Error":"The param is not a number or a valid number"});
   }
@@ -46,8 +52,8 @@ router.route('/tags/:page')
     start = 0
   else
     start = page * limit
-  
-  var query = 'SELECT * FROM tags ORDER BY relevancia DESC'+ ' LIMIT ' + start + ',' + limit 
+
+  var query = 'SELECT * FROM tags ORDER BY relevancia DESC'+ ' LIMIT ' + start + ',' + limit
 
   db.mysqlConnection.query(query, function(err, rows, fields) {
     if (!err){

@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var db = require('../../config/db.js');
 
-var query = 'SELECT user_dados.nome, user_dados.descricao, user_dados.sexo, user_dados.aniversario, users.id, users.state, users.type, users.topicos_count, users.comments_count, users.adesoes_count, users.relevancia, users.inspirations_count, cidades.nome AS `city_name`, estados.nome AS `state_name`, estados.abrev AS `state_abrev` FROM users INNER JOIN locais ON locais.responsavel_type = "User" AND locais.responsavel_id = users.id INNER JOIN user_dados ON users.id = user_dados.user_id INNER JOIN cidades ON cidades.id = locais.cidade_id INNER JOIN estados ON estados.id = locais.estado_id ORDER BY user.relevancia DESC'
+var query = 'SELECT user_dados.nome, user_dados.descricao, user_dados.sexo, user_dados.aniversario, users.id, users.state, users.type, users.topicos_count, users.comments_count, users.adesoes_count, users.relevancia, users.inspirations_count, cidades.nome AS `city_name`, estados.nome AS `state_name`, estados.abrev AS `state_abrev` FROM users INNER JOIN locais ON locais.responsavel_type = "User" AND locais.responsavel_id = users.id INNER JOIN user_dados ON users.id = user_dados.user_id INNER JOIN cidades ON cidades.id = locais.cidade_id INNER JOIN estados ON estados.id = locais.estado_id'
 
 
 /**
@@ -46,18 +46,24 @@ var query = 'SELECT user_dados.nome, user_dados.descricao, user_dados.sexo, user
  *     description: Returns all users
  *     produces:
  *       - application/json
+ *     parameters:
+ *       - name: page
+ *         description: Page of users , 30 by page
+ *         in: query
+ *         required: false
+ *         type: integer
  *     responses:
  *       200:
  *         description: An array of users
  *         schema:
  *           $ref: '#/definitions/User'
  */
-router.route('/users/:page')
+router.route('/users')
 .get(function(req,res) {
-  var page = req.params.page
+  var page = req.query.page
   var start = 0
   var limit = 30
-  
+
   if(isNaN(page) || page == 0){
     return res.json({"Error":"The param is not a number or a valid number"});
   }
@@ -65,9 +71,9 @@ router.route('/users/:page')
     start = 0
   else
     start = page * limit
-  
-  var limitToQuery = ' LIMIT ' + start + ',' + limit 
-  var newQuery = query + limitToQuery
+
+  var limitToQuery = ' LIMIT ' + start + ',' + limit
+  var newQuery = query + ' ORDER BY users.relevancia DESC' + limitToQuery
   db.mysqlConnection.query(newQuery, function(err, rows, fields) {
     if (!err){
       res.json(rows);
@@ -100,7 +106,7 @@ router.route('/users/:page')
  *         schema:
  *           $ref: '#/definitions/User'
  */
-router.route('/user/:user_id')
+router.route('/users/:user_id')
 .get(function(req,res) {
   if (isNaN(req.params.user_id)) {
     return res.json("The param is not a number");
