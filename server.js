@@ -2,8 +2,10 @@ var express    = require("express");
 var routesSetup = require('./config/routes')
 var swaggerSetup = require('./config/swagger-setup')
 var app = express();
-var db = require('./config/db');
+process.env.NODE_ENV = app.get('env') //set node env
 
+
+var db = require('./config/db');
 var morgan      = require('morgan');
 app.use(morgan('dev'));
 

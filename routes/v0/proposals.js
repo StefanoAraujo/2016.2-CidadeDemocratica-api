@@ -74,10 +74,7 @@ router.route('/proposals')
       var newQuery = query + ' ORDER BY topicos.relevancia DESC'
 
     } else {
-      if(page == 1)
-        start = 0
-      else
-        start = page * limit
+      start = (page - 1) * limit
 
       var limitToQuery = ' LIMIT ' + start + ',' + limit
       var newQuery = query + ' ORDER BY topicos.relevancia DESC' + limitToQuery

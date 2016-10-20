@@ -10,7 +10,6 @@ var connection = mysql.createConnection({
 });
 
 function setupDatabase(){
-
   connection.connect(function(err){
     if(!err) {
       console.log("Database is connected ... nn");

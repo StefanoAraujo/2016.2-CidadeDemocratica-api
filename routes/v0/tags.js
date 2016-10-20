@@ -44,21 +44,18 @@ router.route('/tags')
   var page = req.query.page
   var start = 0
   var limit = 30
-  
+
   if(isNaN(page) || page == 0){
-    var newQuery = query + ' ORDER BY users.relevancia DESC'
+    var newQuery = query + ' ORDER BY tags.relevancia DESC'
 
   } else {
-    if(page == 1)
-      start = 0
-    else
-      start = page * limit
+    start = (page - 1) * limit
 
     var limitToQuery = ' LIMIT ' + start + ',' + limit
-    var newQuery = query + ' ORDER BY users.relevancia DESC' + limitToQuery
+    var newQuery = query + ' ORDER BY tags.relevancia DESC' + limitToQuery
   }
 
-  db.mysqlConnection.query(query, function(err, rows, fields) {
+  db.mysqlConnection.query(newQuery, function(err, rows, fields) {
     if (!err){
       res.json(rows);
     }else{
