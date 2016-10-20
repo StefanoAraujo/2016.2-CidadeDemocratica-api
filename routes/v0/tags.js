@@ -86,7 +86,7 @@ router.route('/tags')
  *         schema:
  *           $ref: '#/definitions/Tag'
  */
-router.route('/tag/:tag_id')
+router.route('/tags/:tag_id')
 .get(function(req,res) {
   if (isNaN(req.params.tag_id)) {
     return res.json("The param is not a number");
