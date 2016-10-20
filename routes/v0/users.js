@@ -74,7 +74,7 @@ router.route('/users')
       start = page * limit
 
     var limitToQuery = ' LIMIT ' + start + ',' + limit
-    var newQuery = query + ' ORDER BY users.relevancia DESC' + limitToQuery
+    var newQuery = query + ' ORDER BY tags.relevancia DESC' + limitToQuery
   }
 
   db.mysqlConnection.query(newQuery, function(err, rows, fields) {
