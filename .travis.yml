@@ -28,3 +28,6 @@ deploy:
   on:
     # tags: true
     branch: master
+    
+notifications:
+  slack: gpp-mds-grupo8:KU0OCURzUrokK90ypf1eU6OB
