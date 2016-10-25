@@ -13,21 +13,11 @@ after_success:
   - bash <(curl -s https://codecov.io/bash)
 
 deploy:
+  provider: heroku
+  api_key: $HEROKU_API_KEY
+  app:
+    dev: cidadedemocraticaapi-stagging
+    master: cidadedemocraticaapi
 
-# - provider: heroku
-#   api_key:
-#     secure: $HEROKU_API_KEY
-#   app: cidadedemocraticaapi-stagging
-#   on:
-#     branch: master
-
-- provider: heroku
-  api_key:
-    secure: $HEROKU_API_KEY
-  app: cidadedemocraticaapi
-  on:
-    # tags: true
-    branch: master
-    
 notifications:
   slack: gpp-mds-grupo8:KU0OCURzUrokK90ypf1eU6OB
