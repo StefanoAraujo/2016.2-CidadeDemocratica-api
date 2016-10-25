@@ -13,7 +13,7 @@ exports.setup = function(app,express) {
       version: '0',
       description: 'Demonstrating how to describe a RESTful API with Swagger',
     },
-    host: environment.server.current.host,
+    host: environment.server.current.host + environment.server.current.port,
     basePath: '/api/v0'
   };
 

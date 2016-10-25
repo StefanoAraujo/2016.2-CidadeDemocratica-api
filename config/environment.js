@@ -44,8 +44,8 @@ function serverProtocolAndHost() {
       case 'development':
         return {
           protocol: "http://",
-          host: "localhost:",
-          port: '8080'
+          host: "localhost",
+          port: ':3000'
         }
       case 'production':
         return  {
