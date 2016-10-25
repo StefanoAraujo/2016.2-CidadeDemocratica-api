@@ -63,6 +63,12 @@ var query = 'SELECT topicos.id, topicos.user_id, topicos.titulo, topicos.descric
  *         in: query
  *         required: false
  *         type: integer
+ *       - name: user_id
+ *         description: Proposals of this user
+ *         in: query
+ *         required: false
+ *         type: integer
+
  *     responses:
  *       200:
  *         description: An array of proposals
@@ -74,10 +80,22 @@ router.route('/proposals')
 
 
     var newQuery = query
-
-    if (req.query.tag_id != null) {
+    var wheresCount = 0
+    // console.log()
+    if (req.query.tag_id != null && parseInt(req.query.tag_id) > 0) {
       var tagFilterQuery = ' WHERE topicos.id in (select taggings.taggable_id from taggings where taggings.tag_id = ' + req.query.tag_id + ") "
       newQuery = newQuery + tagFilterQuery
+      wheresCount += 1
+    }
+
+    if (req.query.user_id != null && parseInt(req.query.user_id) > 0) {
+      if (wheresCount > 0) {
+        newQuery = newQuery + ' AND '
+      } else {
+        newQuery = newQuery + ' WHERE '
+      }
+
+      newQuery = newQuery + ' topicos.user_id = ' + req.query.user_id
     }
 
     var page = req.query.page
@@ -93,7 +111,7 @@ router.route('/proposals')
       newQuery = newQuery + ' ORDER BY topicos.relevancia DESC' + limitToQuery
     }
 
-    console.log(newQuery);
+    // console.log(newQuery);
 
     db.mysqlConnection.query(newQuery, function(err, rows, fields) {
       if (!err){
