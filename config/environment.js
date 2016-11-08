@@ -65,13 +65,30 @@ function serverProtocolAndHost() {
   return process.env.NODE_ENV
 }
 
-module.exports = {
+function serverMongoURI() {
+  switch (process.env.NODE_ENV) {
+      case 'development':
+        return {
+          uri     : 'mongodb://localhost/cidade_gpp',
+        }
+      case 'production':
+        return {
+          uri     : process.env.MONGO_DB,
+        }
+      default :
+        return ''
+  }
+  return process.env.NODE_ENV
+}
 
+module.exports = {
   database: {
     current: databaseHost()
   },
   server: {
     current: serverProtocolAndHost()
+  },
+  mongo_uri: {
+    current: serverMongoURI()
   }
-
 }

@@ -1,10 +1,11 @@
 var express    = require("express");
 var routesSetup = require('./config/routes')
 var swaggerSetup = require('./config/swagger-setup')
+var mongoose = require('mongoose')
 var app = express();
 process.env.NODE_ENV = app.get('env') //set node env
 
-
+//SETUP MYSQL DB
 var db = require('./config/db');
 var morgan      = require('morgan');
 app.use(morgan('dev'));
@@ -25,9 +26,11 @@ app.use(function (err, req, res, next) {
     next()
 })
 
+//SETUP MONGODB LOCAL DB
+var environment = require('./config/environment');
+mongoose.connect(environment.mongo_uri.current.uri);
 
 routesSetup.setupRoutesAndVersions(app);
-
 
 module.exports = app
 
