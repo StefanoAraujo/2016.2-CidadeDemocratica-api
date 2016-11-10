@@ -1,4 +1,5 @@
 var express = require('express');
+var authvalidate = require('../../config/auth-validate.js')
 var router = express.Router();
 var db = require('../../config/db.js');
 
@@ -77,49 +78,56 @@ var query = 'SELECT topicos.id, topicos.user_id, topicos.titulo, topicos.descric
  */
 router.route('/proposals')
 .get(function(req,res) {
+    var token = req.headers.authorization
+    var result = false
+    authvalidate.isValidToken(token,function(isValid){
+      result = isValid
+      if(result){
+        var newQuery = query
+        var wheresCount = 0
+        // console.log()
+        if (req.query.tag_id != null && parseInt(req.query.tag_id) > 0) {
+          var tagFilterQuery = ' WHERE topicos.id in (select taggings.taggable_id from taggings where taggings.tag_id = ' + req.query.tag_id + ") "
+          newQuery = newQuery + tagFilterQuery
+          wheresCount += 1
+        }
 
+        if (req.query.user_id != null && parseInt(req.query.user_id) > 0) {
+          if (wheresCount > 0) {
+            newQuery = newQuery + ' AND '
+          } else {
+            newQuery = newQuery + ' WHERE '
+          }
 
-    var newQuery = query
-    var wheresCount = 0
-    // console.log()
-    if (req.query.tag_id != null && parseInt(req.query.tag_id) > 0) {
-      var tagFilterQuery = ' WHERE topicos.id in (select taggings.taggable_id from taggings where taggings.tag_id = ' + req.query.tag_id + ") "
-      newQuery = newQuery + tagFilterQuery
-      wheresCount += 1
-    }
+          newQuery = newQuery + ' topicos.user_id = ' + req.query.user_id
+        }
 
-    if (req.query.user_id != null && parseInt(req.query.user_id) > 0) {
-      if (wheresCount > 0) {
-        newQuery = newQuery + ' AND '
+        var page = req.query.page
+        var start = 0
+        var limit = 30
+        if(isNaN(page) || page == 0){
+          newQuery = newQuery + ' ORDER BY topicos.relevancia DESC'
+
+        } else {
+          start = (page - 1) * limit
+
+          var limitToQuery = ' LIMIT ' + start + ',' + limit
+          newQuery = newQuery + ' ORDER BY topicos.relevancia DESC' + limitToQuery
+        }
+
+        // console.log(newQuery);
+
+        db.mysqlConnection.query(newQuery, function(err, rows, fields) {
+          if (!err){
+            res.json(rows);
+          }else{
+            res.send(err);
+          }
+        });
       } else {
-        newQuery = newQuery + ' WHERE '
+        res.json({error: 'Not allowed to request'});
       }
-
-      newQuery = newQuery + ' topicos.user_id = ' + req.query.user_id
-    }
-
-    var page = req.query.page
-    var start = 0
-    var limit = 30
-    if(isNaN(page) || page == 0){
-       newQuery = newQuery + ' ORDER BY topicos.relevancia DESC'
-
-    } else {
-      start = (page - 1) * limit
-
-      var limitToQuery = ' LIMIT ' + start + ',' + limit
-      newQuery = newQuery + ' ORDER BY topicos.relevancia DESC' + limitToQuery
-    }
-
-    // console.log(newQuery);
-
-    db.mysqlConnection.query(newQuery, function(err, rows, fields) {
-      if (!err){
-        res.json(rows);
-      }else{
-        res.send(err);
-      }
-    });
+    })
 })
 
 /**
@@ -145,21 +153,28 @@ router.route('/proposals')
  */
 router.route('/proposals/:proposal_id')
 .get(function(req,res) {
+  var token = req.headers.authorization
+  var result = false
+  authvalidate.isValidToken(token,function(isValid){
+    result = isValid
+    if(result){
+      if (isNaN(req.params.proposal_id)) {
+          return res.json("The param is not a number");
+      }
+      var sqlQueryString = query + ' WHERE topicos.id = ' + req.params.proposal_id
+      console.log(sqlQueryString)
 
-  if (isNaN(req.params.proposal_id)) {
-    return res.json("The param is not a number");
-  }
-  var sqlQueryString = query + ' WHERE topicos.id = ' + req.params.proposal_id
-  console.log(sqlQueryString)
-
-  db.mysqlConnection.query(sqlQueryString, function(err, rows, fields) {
-    if (!err){
-      res.json(rows);
-    }else{
-      res.send(err);
+      db.mysqlConnection.query(sqlQueryString, function(err, rows, fields) {
+        if (!err){
+          res.json(rows);
+        }else{
+          res.send(err);
+        }
+        });
+    } else {
+      res.json({error: 'Not allowed to request'});
     }
-    });
-
+  }) 
 })
 
 module.exports = router;
