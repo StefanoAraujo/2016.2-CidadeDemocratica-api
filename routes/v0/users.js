@@ -1,4 +1,5 @@
 var express = require('express');
+var authvalidate = require('../../config/auth-validate.js')
 var router = express.Router();
 var db = require('../../config/db.js');
 
@@ -60,28 +61,35 @@ var query = 'SELECT user_dados.nome, user_dados.descricao, user_dados.sexo, user
  */
 router.route('/users')
 .get(function(req,res) {
-  var page = req.query.page
-  var start = 0
-  var limit = 30
+  var token = req.headers.authorization
+  var result = false
+  authvalidate.isValidToken(token,function(isValid){
+    result = isValid
+    if(result){
+      var page = req.query.page
+      var start = 0
+      var limit = 30
 
-  if(isNaN(page) || page == 0){
-    var newQuery = query + ' ORDER BY users.relevancia DESC'
+      if(isNaN(page) || page == 0){
+        var newQuery = query + ' ORDER BY users.relevancia DESC'
+      } else {
+        start = (page - 1) * limit
 
-  } else {
-    start = (page - 1) * limit
+        var limitToQuery = ' LIMIT ' + start + ',' + limit
+        var newQuery = query + ' ORDER BY users.relevancia DESC' + limitToQuery
+      }
 
-    var limitToQuery = ' LIMIT ' + start + ',' + limit
-    var newQuery = query + ' ORDER BY users.relevancia DESC' + limitToQuery
-  }
-
-  db.mysqlConnection.query(newQuery, function(err, rows, fields) {
-    if (!err){
-      res.json(rows);
-    }else{
-      res.send(err);
+      db.mysqlConnection.query(newQuery, function(err, rows, fields) {
+        if (!err){
+          res.json(rows);
+        }else{
+          res.send(err);
+        }
+      });
+    } else {
+      res.json({error: 'Not allowed to request'});
     }
-    });
-
+  })
 })
 
 
@@ -108,18 +116,26 @@ router.route('/users')
  */
 router.route('/users/:user_id')
 .get(function(req,res) {
-  if (isNaN(req.params.user_id)) {
-    return res.json("The param is not a number");
-  }
-  var sqlQueryString = query + ' WHERE users.id = ' + req.params.user_id;
-  db.mysqlConnection.query(sqlQueryString, function(err, rows, fields) {
-    if (!err){
-      res.json(rows);
-    }else{
-      res.send(err);
+  var token = req.headers.authorization
+  var result = false
+  authvalidate.isValidToken(token,function(isValid){
+    result = isValid
+    if(result){
+      if (isNaN(req.params.user_id)) {
+        return res.json("The param is not a number");
+      }
+      var sqlQueryString = query + ' WHERE users.id = ' + req.params.user_id;
+      db.mysqlConnection.query(sqlQueryString, function(err, rows, fields) {
+        if (!err){
+          res.json(rows);
+        } else {
+          res.send(err);
+        }
+      });
+    } else {
+      res.json({error: 'Not allowed to request'});
     }
-    });
-
+  })
 })
 
 module.exports = router;

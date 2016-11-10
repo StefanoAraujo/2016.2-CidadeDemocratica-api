@@ -3,8 +3,8 @@ exports.setupRoutesAndVersions = function(app) {
   var ROUTES = {
   'Tags':'/tags',
   'Proposals': '/proposals',
-  'Taggings': '/taggings',
-  'Users': '/users'
+  'Users': '/users',
+  'Token': '/authenticate'
   }
 
   var VERSIONS = {'Pre-Production': '/v0'}
