@@ -9,16 +9,16 @@ Users = mongoose.model('User');
 router.route('/authenticate')
 .post(function(req,res) {
     var token = hat()
-   Users.create({'token':token}, function (err, small) {
+    var pushId = req.query.pushId
+    Users.create({'token':token, 'firebaseId':pushId}, function (err, small) {
        return res.json({'error':err,
                         'token': token})
-   });
+     });
 })
 
 router.route('/authenticate')
 .get(function(req,res) {
-    var token = req.query.token
-   Users.find({token: token},{_id:false, __v:false}, function (err, results) {
+   Users.find({},{_id:false, __v:false}, function (err, results) {
        return res.json(results)
    });
 })
