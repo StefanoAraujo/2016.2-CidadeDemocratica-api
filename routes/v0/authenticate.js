@@ -11,6 +11,7 @@ router.route('/authenticate')
     var token = hat()
     var pushId = req.query.pushId
     Users.create({'token':token, 'firebaseId':pushId}, function (err, small) {
+       console.log(small)
        return res.json({'error':err,
                         'token': token})
      });
