@@ -1,4 +1,4 @@
-
+var favorites = require('../modules/favorites.js')
 var mysql      = require('mysql');
 var environment      = require('./environment');
 
@@ -13,6 +13,7 @@ function setupDatabase(){
   connection.connect(function(err){
     if(!err) {
       console.log("Database is connected ... nn");
+      favorites.favoriteUpdater()
     } else {
       console.log("Error connecting database ... nn" + err);
     }

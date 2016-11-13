@@ -2,6 +2,9 @@ var express = require('express');
 var authvalidate = require('../../config/auth-validate.js')
 var router = express.Router();
 var db = require('../../config/db.js');
+require('../../model/proposal')
+var mongoose = require('mongoose'),
+Proposals = mongoose.model('Proposal');
 
 var query = 'SELECT topicos.id, topicos.user_id, topicos.titulo, topicos.descricao, topicos.slug, topicos.comments_count, topicos.adesoes_count, topicos.relevancia, topicos.seguidores_count, topicos.competition_id, topicos.site, cidades.nome AS `city_name`, estados.nome AS `state_name`, estados.abrev AS `state_abrev`FROM topicos INNER JOIN locais ON topicos.type = "Proposta" AND locais.responsavel_type = "User" AND locais.responsavel_id = topicos.id INNER JOIN cidades ON cidades.id = locais.cidade_id INNER JOIN estados ON estados.id = locais.estado_id'
 
@@ -175,6 +178,57 @@ router.route('/proposals/:proposal_id')
       res.json({error: 'Not allowed to request'});
     }
   }) 
+})
+
+router.route('/proposals')
+.post(function(req,res) {
+  var token = req.headers.authorization
+  var result = false
+  var find = false
+  authvalidate.isValidToken(token,function(isValid){
+    result = isValid
+    if(result){
+      var id = req.query.id
+      Proposals.findOne({id: id},{}, function (err, result) {
+        console.log(result.users)
+        var message = " "
+        var users = result.users
+        
+        if(users.length > 0){
+           users.forEach(function(obj, index){
+            console.log(index)
+            if(token == obj){
+              users.splice(index, 1);
+              message = "User removed with success"
+              find = true
+              return
+            }
+          })
+          if(!find){
+             users.push(token)
+             message = "User add with success"
+          }
+        }else{
+          users.push(token)
+          message = "User add with success"
+        }
+        result.users = users
+        result.save(function(err) {
+          if(!err) {
+            console.log(result.users)
+            res.json({error: false,
+                      message: message});
+          }
+          else {
+            res.json({error: true,
+                      message:"Error: could not save user to proposal listening list "});
+          }
+        });
+      })
+    } else {
+      res.json({error: 'Not allowed to request'});
+    }
+  });
 })
 
 module.exports = router;
