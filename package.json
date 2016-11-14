@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "express": "^4.10.6",
+    "fcm-node": "^1.0.15",
     "hat": "0.0.3",
     "mongoose": "^4.6.6",
     "morgan": "^1.7.0",

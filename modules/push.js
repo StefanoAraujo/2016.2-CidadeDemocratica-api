@@ -1,37 +1,28 @@
-var request = require('request');
+var FCM = require('fcm-node')
 
-require('../model/user')
-var mongoose = require('mongoose'),
-Users = mongoose.model('User');
+function pushDefaultData(firebaseId,callback){
+    var FCM = require('fcm-node');
 
-// var sender = new gcm.Sender('cbbefc2519faf45e9895565c0466721f09aa59a0');
+    var serverKey = 'AIzaSyBkQ4RH4h08u92vE3oruxkoCEma2BNsI5M';
+    var fcm = new FCM(serverKey);
 
-function pushDefaultData(callback){
-   var firebaseId = ""
-   Users.find({},{_id:false, __v:false}, function (err, results) {
-       firebaseId = results[0].firebaseId
-       // Prepare a message to be sent
-        // var message = new gcm.Message({
-        //     data: { key1: 'Acompanhe a democracia na sua cidade' }
-        // });
+    var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+        to: firebaseId, 
+        collapse_key: 'test',
+        
+        notification: {
+            title: 'Cidade Democrática', 
+            body: 'Não deixe de acompanhar a democracia na sua cidade' 
+        },
+    };
 
-        // // Specify which registration IDs to deliver the message to
-        // var regTokens = [firebaseId];
-
-        // console.log(regTokens)
-        // console.log(message)
-
-        // // Actually send the message
-        // sender.send(message, { registrationTokens: regTokens }, function (err, response) {
-        //     if (err){
-        //         console.log(response)
-        //         callback(err)
-        //     }
-        //     else callback(response);
-        // });
-
-        callback('Alguma coisa ai:')
-   });
+    fcm.send(message, function(err, response){
+        if (err) {
+            callback(err)
+        } else {
+            callback(response)
+        }
+    });
 }
 
 exports.pushDefaultData = pushDefaultData

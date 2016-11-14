@@ -4,7 +4,8 @@ var pushModule = require('../../modules/push.js')
 
 router.route('/push')
 .get(function(req,res) {
-  pushModule.pushDefaultData(function(result){
+  var pushId = req.query.pushId
+  pushModule.pushDefaultData(pushId,function(result){
       res.json({'message':result})
   })
 })
