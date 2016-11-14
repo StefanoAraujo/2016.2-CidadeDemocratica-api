@@ -13,6 +13,7 @@ router.route('/authenticate')
   var pushId = req.query.pushId
   var result = false
   var find = false
+  res.setHeader('Method', 'POST')
   authvalidate.isValidToken(token,function(isValid){
     result = isValid
     if(result){
@@ -38,6 +39,7 @@ router.route('/authenticate')
 router.route('/authenticate')
 .get(function(req,res) {
     var token = hat()
+    res.setHeader('Method', 'GET')
     Users.create({'token':token}, function (err, small) {
        console.log(small)
        return res.json({'error':err,
