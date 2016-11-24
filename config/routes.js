@@ -4,6 +4,7 @@ exports.setupRoutesAndVersions = function(app) {
   'Tags':'/tags',
   'Proposals': '/proposals',
   'Users': '/users',
+  'States': '/states',  
   'Token': '/authenticate',
   'Push': '/push'
   }
