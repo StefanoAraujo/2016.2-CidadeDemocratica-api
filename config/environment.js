@@ -2,18 +2,18 @@ function databaseHost() {
   switch (process.env.NODE_ENV) {
 
       case 'development':
-        // return {
-        //   host     : 'localhost',
-        //   user     : 'root',
-        //   password : 'root',
-        //   databaseName : 'cidade_democratica_integra'
-        // }
         return {
-          host     : 'testcidadedemocratica.ca0jctiv4wib.sa-east-1.rds.amazonaws.com',
-          user     : 'testuser',
-          password : 'testuser',
-          databaseName : 'dumpCidadeDemocratica'
+          host     : 'localhost',
+          user     : 'root',
+          password : 'root',
+          databaseName : 'cidade_democratica_integra'
         }
+        // return {
+        //   host     : 'testcidadedemocratica.ca0jctiv4wib.sa-east-1.rds.amazonaws.com',
+        //   user     : 'testuser',
+        //   password : 'testuser',
+        //   databaseName : 'dumpCidadeDemocratica'
+        // }
 
       case 'production':
 
