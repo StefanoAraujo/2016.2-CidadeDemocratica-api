@@ -72,6 +72,11 @@ var query = 'SELECT topicos.id, topicos.user_id, topicos.titulo, topicos.descric
  *         in: query
  *         required: false
  *         type: integer
+ *       - name: federal_unity_code
+ *         description: Uf of an state to get just proposals of this proposal , GO, DF or something like this.
+ *         in: query
+ *         required: false
+ *         type: integer
  *       - name: Authorization
  *         description: access token user
  *         in: header
@@ -93,8 +98,21 @@ router.route('/proposals')
                 var newQuery = query
                 var wheresCount = 0
                 // console.log()
+
+                if (req.query.federal_unity_code != null && req.query.federal_unity_code.length < 3) {
+                   var UFFilterQuery = ' AND estados.abrev = "' + req.query.federal_unity_code + '"'
+                    newQuery = newQuery + UFFilterQuery
+                }
+
                 if (req.query.tag_id != null && parseInt(req.query.tag_id) > 0) {
-                    var tagFilterQuery = ' WHERE topicos.id in (select taggings.taggable_id from taggings where taggings.tag_id = ' + req.query.tag_id + ") "
+                    
+                      if (wheresCount > 0) {
+                        newQuery = newQuery + ' AND '
+                    } else {
+                        newQuery = newQuery + ' WHERE '
+                    }
+                    
+                    var tagFilterQuery = ' topicos.id in (select taggings.taggable_id from taggings where taggings.tag_id = ' + req.query.tag_id + ") "
                     newQuery = newQuery + tagFilterQuery
                     wheresCount += 1
                 }
@@ -108,6 +126,7 @@ router.route('/proposals')
 
                     newQuery = newQuery + ' topicos.user_id = ' + req.query.user_id
                 }
+     
 
                 var page = req.query.page
                 var start = 0
