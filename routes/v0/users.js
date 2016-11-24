@@ -53,6 +53,11 @@ var query = 'SELECT user_dados.nome, user_dados.descricao, user_dados.sexo, user
  *         in: query
  *         required: false
  *         type: integer
+ *       - name: Authorization
+ *         description: access token user
+ *         in: header
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
  *         description: An array of users
@@ -108,6 +113,11 @@ router.route('/users')
 *         in: path
 *         required: false
 *         type: integer
+*       - name: Authorization
+*         description: access token user
+*         in: header
+*         required: true
+*         type: string
  *     responses:
  *       200:
  *         description: A user detail

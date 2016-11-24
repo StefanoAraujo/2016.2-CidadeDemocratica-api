@@ -72,7 +72,11 @@ var query = 'SELECT topicos.id, topicos.user_id, topicos.titulo, topicos.descric
  *         in: query
  *         required: false
  *         type: integer
-
+ *       - name: Authorization
+ *         description: access token user
+ *         in: header
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
  *         description: An array of proposals
@@ -148,6 +152,11 @@ router.route('/proposals')
 *         in: path
 *         required: true
 *         type: integer
+*       - name: Authorization
+*         description: access token user
+*         in: header
+*         required: true
+*         type: string
  *     responses:
  *       200:
  *         description: A proposal detail

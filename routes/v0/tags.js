@@ -34,6 +34,16 @@ var query = 'SELECT * FROM tags '
  *         in: query
  *         required: false
  *         type: integer
+*       - name: proposal_id
+ *         description: get all tags of proposal_id
+ *         in: query
+ *         required: false
+ *         type: integer
+*       - name: Authorization
+ *         description: access token user
+ *         in: header
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
  *         description: An array of tags
@@ -51,20 +61,20 @@ router.route('/tags')
       var start = 0
       var limit = 30
 
-      //  if (req.query.proposal_id != null && parseInt(req.query.proposal_id) > 0) {
-      //               var tagFilterQuery = ' WHERE id in (select taggings.taggable_id from taggings where taggings.tag_id = ' + req.query.tag_id + ") "
-      //               newQuery = newQuery + tagFilterQuery
-      //               wheresCount += 1
-      // }
+      var newQuery = query
+       if (req.query.proposal_id != null && parseInt(req.query.proposal_id) > 0) {
+                    var tagFilterQuery = ' WHERE id in (select taggings.tag_id from taggings where taggings.taggable_id = ' + req.query.proposal_id + ") "
+                    newQuery = newQuery + tagFilterQuery
+      }
 
       if(isNaN(page) || page == 0){
-        var newQuery = query + ' ORDER BY tags.relevancia DESC'
+        newQuery = newQuery + ' ORDER BY tags.relevancia DESC'
 
       } else {
         start = (page - 1) * limit
 
         var limitToQuery = ' LIMIT ' + start + ',' + limit
-        var newQuery = query + ' ORDER BY tags.relevancia DESC' + limitToQuery
+        newQuery = newQuery + ' ORDER BY tags.relevancia DESC' + limitToQuery
       }
 
       db.mysqlConnection.query(newQuery, function(err, rows, fields) {
@@ -97,6 +107,11 @@ router.route('/tags')
 *         in: path
 *         required: true
 *         type: integer
+*       - name: Authorization
+*         description: access token user
+*         in: header
+*         required: true
+*         type: string
  *     responses:
  *       200:
  *         description: A tag detail
