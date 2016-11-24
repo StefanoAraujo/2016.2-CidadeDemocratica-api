@@ -51,6 +51,12 @@ router.route('/tags')
       var start = 0
       var limit = 30
 
+      //  if (req.query.proposal_id != null && parseInt(req.query.proposal_id) > 0) {
+      //               var tagFilterQuery = ' WHERE id in (select taggings.taggable_id from taggings where taggings.tag_id = ' + req.query.tag_id + ") "
+      //               newQuery = newQuery + tagFilterQuery
+      //               wheresCount += 1
+      // }
+
       if(isNaN(page) || page == 0){
         var newQuery = query + ' ORDER BY tags.relevancia DESC'
 

@@ -294,11 +294,11 @@ router.route('/favorite_proposals')
                 Proposals.find({ users: token }, function(err, result) {
                     if (result != null) {
 
-                        let idsArray = result.map(function(x) {
+                        var idsArray = result.map(function(x) {
                             return x.id
                         }).join()
                         'WHERE topicos.id'
-                        let proposalsQuery = query + ' WHERE topicos.id IN (' + idsArray + ')'
+                        var proposalsQuery = query + ' WHERE topicos.id IN (' + idsArray + ')'
 
                         db.mysqlConnection.query(proposalsQuery, function(err, rows, fields) {
                             if (!err) {
