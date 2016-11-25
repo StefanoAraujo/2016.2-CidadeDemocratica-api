@@ -112,27 +112,19 @@ router.route('/proposals')
 
                 if (req.query.tag_id != null && parseInt(req.query.tag_id) > 0) {
                     
-                      if (wheresCount > 0) {
-                        newQuery = newQuery + ' AND '
-                    } else {
-                        newQuery = newQuery + ' WHERE '
-                    }
                     
-                    var tagFilterQuery = ' topicos.id in (select taggings.taggable_id from taggings where taggings.tag_id = ' + req.query.tag_id + ") "
+                    
+                    var tagFilterQuery = ' AND topicos.id in (select taggings.taggable_id from taggings where taggings.tag_id = ' + req.query.tag_id + ") "
                     newQuery = newQuery + tagFilterQuery
                     wheresCount += 1
                 }
 
-                if (req.query.user_id != null && parseInt(req.query.user_id) > 0) {
-                    if (wheresCount > 0) {
-                        newQuery = newQuery + ' AND '
-                    } else {
-                        newQuery = newQuery + ' WHERE '
-                    }
-
-                    newQuery = newQuery + ' topicos.user_id = ' + req.query.user_id
+                if (req.query.user_id != null && parseInt(req.query.user_id) > 0) {                  
+                    newQuery = newQuery + ' AND topicos.user_id = ' + req.query.user_id
                 }
-     
+                
+               newQuery += ' GROUP BY topicos.id'
+
 
                 var page = req.query.page
                 var start = 0
@@ -146,6 +138,7 @@ router.route('/proposals')
                     var limitToQuery = ' LIMIT ' + start + ',' + limit
                     newQuery = newQuery + ' ORDER BY topicos.relevancia DESC' + limitToQuery
                 }
+
 
                 // console.log(newQuery);
 
