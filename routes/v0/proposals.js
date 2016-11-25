@@ -324,8 +324,7 @@ router.route('/favorite_proposals')
                         var idsArray = result.map(function(x) {
                             return x.id
                         }).join()
-                        'WHERE topicos.id'
-                        var proposalsQuery = query + ' WHERE topicos.id IN (' + idsArray + ')'
+                        var proposalsQuery = query + ' AND topicos.id IN (' + idsArray + ')'
 
                         db.mysqlConnection.query(proposalsQuery, function(err, rows, fields) {
                             if (!err) {
