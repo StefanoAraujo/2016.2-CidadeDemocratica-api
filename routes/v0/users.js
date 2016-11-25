@@ -3,13 +3,13 @@ var authvalidate = require('../../config/auth-validate.js')
 var router = express.Router();
 var db = require('../../config/db.js');
 
-var query = 'SELECT user_dados.nome, user_dados.descricao, user_dados.sexo, user_dados.aniversario, users.id, users.state, users.type, users.topicos_count, users.comments_count, users.adesoes_count, users.relevancia, users.inspirations_count, cidades.nome AS `city_name`, estados.nome AS `state_name`, estados.abrev AS `state_abrev`'+
-            'FROM users' +
-	              'INNER JOIN locais ON  locais.responsavel_id = users.id' +
-	              'INNER JOIN user_dados ON users.id = user_dados.user_id' +
-	              'INNER JOIN cidades ON cidades.id = locais.cidade_id '+
-	              'INNER JOIN estados ON estados.id = locais.estado_id' +
-            'WHERE locais.responsavel_type = "User" '
+var query = ' SELECT user_dados.nome, user_dados.descricao, user_dados.sexo, user_dados.aniversario, users.id, users.state, users.type, users.topicos_count, users.comments_count, users.adesoes_count, users.relevancia, users.inspirations_count, cidades.nome AS `city_name`, estados.nome AS `state_name`, estados.abrev AS `state_abrev`'+
+            ' FROM users' +
+	              ' INNER JOIN locais ON  locais.responsavel_id = users.id' +
+	              ' INNER JOIN user_dados ON users.id = user_dados.user_id' +
+	              ' INNER JOIN cidades ON cidades.id = locais.cidade_id '+
+	              ' INNER JOIN estados ON estados.id = locais.estado_id' +
+            ' WHERE locais.responsavel_type = "User" '
 
 
 /**

@@ -6,13 +6,13 @@ require('../../model/proposal')
 var mongoose = require('mongoose'),
     Proposals = mongoose.model('Proposal');
 
-var query = 'SELECT topicos.id, topicos.user_id, topicos.titulo, topicos.descricao, topicos.slug, topicos.comments_count, topicos.adesoes_count, topicos.relevancia, topicos.seguidores_count, topicos.competition_id, topicos.site,'+ 
- + 'cidades.nome AS `city_name`, estados.nome AS `state_name`, estados.abrev AS `state_abrev`'
- + 'FROM topicos' 
- + 'INNER JOIN locais ON  locais.responsavel_id = topicos.id' 
- + 'INNER JOIN cidades ON cidades.id = locais.cidade_id' 
- + 'INNER JOIN estados ON estados.id = locais.estado_id'
- + 'where topicos.type = "Proposta" AND locais.responsavel_type = "Topico"'
+var query = ' SELECT topicos.id, topicos.user_id, topicos.titulo, topicos.descricao, topicos.slug, topicos.comments_count, topicos.adesoes_count, topicos.relevancia, topicos.seguidores_count, topicos.competition_id, topicos.site,'
+ + ' cidades.nome AS `city_name`, estados.nome AS `state_name`, estados.abrev AS `state_abrev`'
+ + ' FROM topicos' 
+ + ' INNER JOIN locais ON  locais.responsavel_id = topicos.id' 
+ + ' INNER JOIN cidades ON cidades.id = locais.cidade_id' 
+ + ' INNER JOIN estados ON estados.id = locais.estado_id'
+ + ' where topicos.type = "Proposta" AND locais.responsavel_type = "Topico"'
 
 /**
  * @swagger
