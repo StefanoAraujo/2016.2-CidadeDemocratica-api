@@ -67,6 +67,9 @@ router.route('/tags')
                     newQuery = newQuery + tagFilterQuery
       }
 
+      newQuery += ' GROUP BY tags.id'
+
+
       if(isNaN(page) || page == 0){
         newQuery = newQuery + ' ORDER BY tags.relevancia DESC'
 
@@ -76,7 +79,7 @@ router.route('/tags')
         var limitToQuery = ' LIMIT ' + start + ',' + limit
         newQuery = newQuery + ' ORDER BY tags.relevancia DESC' + limitToQuery
       }
-
+      
       db.mysqlConnection.query(newQuery, function(err, rows, fields) {
         if (!err){
           res.json(rows);

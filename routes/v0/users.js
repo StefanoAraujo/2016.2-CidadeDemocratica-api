@@ -81,13 +81,16 @@ router.route('/users')
       var start = 0
       var limit = 30
 
+      var newQuery = query + ' GROUP BY users.id'
+
+
       if(isNaN(page) || page == 0){
-        var newQuery = query + ' ORDER BY users.relevancia DESC'
+        newQuery = query + ' ORDER BY users.relevancia DESC'
       } else {
         start = (page - 1) * limit
 
         var limitToQuery = ' LIMIT ' + start + ',' + limit
-        var newQuery = query + ' ORDER BY users.relevancia DESC' + limitToQuery
+        newQuery = query + ' ORDER BY users.relevancia DESC' + limitToQuery
       }
 
       db.mysqlConnection.query(newQuery, function(err, rows, fields) {
