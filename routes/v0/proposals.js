@@ -324,18 +324,21 @@ router.route('/favorite_proposals')
                         var idsArray = result.map(function(x) {
                             return x.id
                         }).join()
-                        var proposalsQuery = query 
+                        
+                          
                         if (idsArray.length > 0) {
-                            proposalsQuery += ' AND topicos.id IN (' + idsArray + ')'
-                        }
-                        console.log(proposalsQuery)
-                        db.mysqlConnection.query(proposalsQuery, function(err, rows, fields) {
+                            var proposalsQuery = query + ' AND topicos.id IN (' + idsArray + ')'
+                            db.mysqlConnection.query(proposalsQuery, function(err, rows, fields) {
                             if (!err) {
                                 res.json(rows);
                             } else {
                                 res.send(err);
                             }
                         });
+                        } else {
+                            res.json([])
+                        }
+                        
                     } else {
                         res.json({ error: err });
                     }
