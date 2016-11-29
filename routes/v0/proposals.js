@@ -325,7 +325,7 @@ router.route('/favorite_proposals')
                             return x.id
                         }).join()
                         var proposalsQuery = query + ' AND topicos.id IN (' + idsArray + ')'
-
+                        console.log(proposalsQuery)
                         db.mysqlConnection.query(proposalsQuery, function(err, rows, fields) {
                             if (!err) {
                                 res.json(rows);
